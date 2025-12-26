@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.UserInfo;
+import Model.UserInfo;//import USerInfo from model folder
 import java.io.*;
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class Actions {
 
     private static final String FILE = "D:\\myMemo\\myMemo\\src\\userInformation.txt";
 
-    // List to hold all users in memory
+    // List to save users in memory
     private static ArrayList<UserInfo> users = new ArrayList<>();
 
     // Load users from file when class is loaded
@@ -36,7 +36,7 @@ public class Actions {
         // Write to file
         try {
             File f = new File(FILE);
-            if (!f.exists()) f.createNewFile(); // create file if not exists
+            if (!f.exists()) f.createNewFile(); // create file if not ex/ists
 
             FileWriter fw = new FileWriter(f, true); // append mode
             fw.write(newUser.getName() + "," + newUser.getPhone() + "," + newUser.getEmail() + "," + newUser.getPassword() + "\n");
@@ -49,14 +49,14 @@ public class Actions {
         return true;
     }
 
-    // Sign in method
+    // signIn method
     public static boolean signIn(String email, String password) {
         // Validate empty fields
         if (email.isEmpty() || password.isEmpty()) {
             return false;
         }
 
-        // Check credentials
+        // Check users credentials
         for (UserInfo u : users) {
             if (u.getEmail().equalsIgnoreCase(email) && u.getPassword().equals(password)) {
                 return true;
@@ -65,7 +65,7 @@ public class Actions {
         return false;
     }
 
-    // Load all users from file into memory
+    // Loads all users from file into memory
     private static void loadUsers() {
         users.clear();
         try {
@@ -104,7 +104,7 @@ public class Actions {
         }
     }
 
-    // Optional: get list of users
+    //gets list of users
     public static ArrayList<UserInfo> getUsers() {
         return users;
     }

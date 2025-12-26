@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 public class PhotoStorage {
+    //Arraylist for photos to store
     private ArrayList<Photo> photos;
 
     public PhotoStorage() {
@@ -39,16 +40,20 @@ public class PhotoStorage {
             this.path = path;
         }
 
+        //Getter methods
         public String getTitle() {
             return title;
         }
+        
+        public String getPath() {
+            return path;
+        }
 
+        //Setter method for title
         public void setTitle(String title) {
             this.title = title;
         }
 
-        public String getPath() {
-            return path;
-        }
+        
     }
 }

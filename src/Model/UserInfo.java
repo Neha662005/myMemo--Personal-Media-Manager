@@ -4,16 +4,14 @@
  */
 package Model;
 
-/**
- *
- * @author HP
- */
+
 public class UserInfo {
     private String name;
     private String phone;
     private String email;
     private String password;
 
+    //Constructor
     public UserInfo(String name, String phone, String email, String password) {
         this.name = name;
         this.phone = phone;
@@ -21,6 +19,7 @@ public class UserInfo {
         this.password = password;
     }
 
+    //Getter methods
     public String getEmail() {
         return email;
     }
@@ -33,6 +32,11 @@ public class UserInfo {
         return name;
     }
 
+     public String getPhone() {
+        return phone;
+    }
+     
+    //Setter Methods
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -41,8 +45,6 @@ public class UserInfo {
         this.password = password;
     }
 
-    public String getPhone() {
-        return phone;
-    }
+   
     
 }

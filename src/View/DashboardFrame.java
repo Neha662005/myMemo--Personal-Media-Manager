@@ -16,9 +16,8 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import Model.PhotoStorage;
 
-
-
 public class DashboardFrame extends javax.swing.JFrame {
+
     CardLayout cl;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardFrame.class.getName());
 
@@ -27,6 +26,7 @@ public class DashboardFrame extends javax.swing.JFrame {
      */
     public DashboardFrame() {
         initComponents();
+        this.setTitle("myMemo");
         cl = (CardLayout) WorkingPanel.getLayout();
     }
 
@@ -68,12 +68,6 @@ public class DashboardFrame extends javax.swing.JFrame {
         clVideos = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         ActualLayoutPanel = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         SearchingPanel = new javax.swing.JPanel();
         SearchTextField = new javax.swing.JTextField();
         SearchButton = new javax.swing.JButton();
@@ -85,6 +79,9 @@ public class DashboardFrame extends javax.swing.JFrame {
         SelectButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -195,11 +192,11 @@ public class DashboardFrame extends javax.swing.JFrame {
         clPhotos.setLayout(new java.awt.GridBagLayout());
         WorkingPanel.add(clPhotos, "card3");
 
-        clAlbums.setBackground(new java.awt.Color(255, 255, 255));
+        clAlbums.setBackground(new java.awt.Color(255, 0, 0));
         clAlbums.setLayout(new java.awt.GridLayout(1, 0));
         WorkingPanel.add(clAlbums, "card4");
 
-        clDocuments.setBackground(new java.awt.Color(255, 255, 255));
+        clDocuments.setBackground(new java.awt.Color(255, 255, 51));
 
         javax.swing.GroupLayout clDocumentsLayout = new javax.swing.GroupLayout(clDocuments);
         clDocuments.setLayout(clDocumentsLayout);
@@ -214,7 +211,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
         WorkingPanel.add(clDocuments, "card5");
 
-        clScreenshots.setBackground(new java.awt.Color(255, 255, 255));
+        clScreenshots.setBackground(new java.awt.Color(51, 255, 51));
 
         javax.swing.GroupLayout clScreenshotsLayout = new javax.swing.GroupLayout(clScreenshots);
         clScreenshots.setLayout(clScreenshotsLayout);
@@ -229,7 +226,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
         WorkingPanel.add(clScreenshots, "card6");
 
-        clFavourites.setBackground(new java.awt.Color(255, 255, 255));
+        clFavourites.setBackground(new java.awt.Color(0, 0, 255));
 
         javax.swing.GroupLayout clFavouritesLayout = new javax.swing.GroupLayout(clFavourites);
         clFavourites.setLayout(clFavouritesLayout);
@@ -244,7 +241,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
         WorkingPanel.add(clFavourites, "card7");
 
-        clBin.setBackground(new java.awt.Color(255, 255, 255));
+        clBin.setBackground(new java.awt.Color(51, 51, 51));
 
         javax.swing.GroupLayout clBinLayout = new javax.swing.GroupLayout(clBin);
         clBin.setLayout(clBinLayout);
@@ -261,26 +258,9 @@ public class DashboardFrame extends javax.swing.JFrame {
 
         WorkingPanel.add(clBin, "card9");
 
+        clVideos.setBackground(new java.awt.Color(0, 102, 102));
+
         ActualLayoutPanel.setLayout(new java.awt.GridLayout(1, 0));
-
-        jButton6.setText("jButton6");
-        ActualLayoutPanel.add(jButton6);
-
-        jButton3.setText("jButton3");
-        ActualLayoutPanel.add(jButton3);
-
-        jButton7.setText("jButton7");
-        ActualLayoutPanel.add(jButton7);
-
-        jButton5.setText("jButton5");
-        ActualLayoutPanel.add(jButton5);
-
-        jButton4.setText("jButton4");
-        ActualLayoutPanel.add(jButton4);
-
-        jButton2.setText("jButton2");
-        ActualLayoutPanel.add(jButton2);
-
         jScrollPane2.setViewportView(ActualLayoutPanel);
 
         javax.swing.GroupLayout clVideosLayout = new javax.swing.GroupLayout(clVideos);
@@ -360,57 +340,97 @@ public class DashboardFrame extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Magneto", 0, 10)); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Pictures\\logo (2).jpg")); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Lucida Handwriting", 0, 12)); // NOI18N
+        jLabel2.setText("myMemo");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout SearchingPanelLayout = new javax.swing.GroupLayout(SearchingPanel);
         SearchingPanel.setLayout(SearchingPanelLayout);
         SearchingPanelLayout.setHorizontalGroup(
             SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SearchingPanelLayout.createSequentialGroup()
-                .addGap(516, 516, 516)
-                .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SearchButton)
-                .addGap(18, 18, 18)
-                .addComponent(jButton8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
-            .addGroup(SearchingPanelLayout.createSequentialGroup()
-                .addGap(414, 414, 414)
-                .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(77, 77, 77)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addComponent(SelectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53)
-                .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addGap(16, 16, 16)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(SearchingPanelLayout.createSequentialGroup()
+                        .addGap(306, 306, 306)
+                        .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SearchButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52))
+                    .addGroup(SearchingPanelLayout.createSequentialGroup()
+                        .addGap(204, 204, 204)
+                        .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addComponent(SelectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)
+                        .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26))))
         );
         SearchingPanelLayout.setVerticalGroup(
             SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SearchingPanelLayout.createSequentialGroup()
-                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(SearchingPanelLayout.createSequentialGroup()
-                            .addGap(32, 32, 32)
-                            .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(SearchButton)
-                                .addComponent(jButton8)))
-                        .addGroup(SearchingPanelLayout.createSequentialGroup()
-                            .addGap(21, 21, 21)
-                            .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(SelectButton)
-                    .addComponent(DeleteButton)
-                    .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(SearchingPanelLayout.createSequentialGroup()
+                        .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(SearchingPanelLayout.createSequentialGroup()
+                                    .addGap(32, 32, 32)
+                                    .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(SearchButton)
+                                        .addComponent(jButton8)))
+                                .addGroup(SearchingPanelLayout.createSequentialGroup()
+                                    .addGap(21, 21, 21)
+                                    .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(SelectButton)
+                            .addComponent(DeleteButton)
+                            .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(SearchingPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -440,7 +460,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     private void VideoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VideoButtonActionPerformed
         // TODO add your handling code here:
-        WorkingPanel.add(clPhotos, "Videos Panel");
+        WorkingPanel.add(clVideos, "Videos Panel");
         cl.show(WorkingPanel, "Videos Panel");
     }//GEN-LAST:event_VideoButtonActionPerformed
 
@@ -479,102 +499,100 @@ public class DashboardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_SortComboBoxActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        
+
 
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void PlusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlusButtonActionPerformed
 
-    JFileChooser chooser = new JFileChooser();
-    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-    int result = chooser.showOpenDialog(this);
-    if (result == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
 
-        // Add to storage
-        storage.addPhoto(file.getName(), file.getAbsolutePath());
-        int index = storage.getPhotos().size() - 1;
+            // Add to storage
+            storage.addPhoto(file.getName(), file.getAbsolutePath());
+            int index = storage.getPhotos().size() - 1;
 
-        // Create card and add to panel
-        PhotoCard card = new PhotoCard(storage, index);
-        clPhotos.add(card);
-        clPhotos.revalidate();
-        clPhotos.repaint();
-    }
+            // Create card and add to panel
+            PhotoCard card = new PhotoCard(storage, index);
+            clPhotos.add(card);
+            clPhotos.revalidate();
+            clPhotos.repaint();
+        }
 
 
     }//GEN-LAST:event_PlusButtonActionPerformed
 
-    
-        /*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-private PhotoStorage storage = new PhotoStorage();
+     */
+    private PhotoStorage storage = new PhotoStorage();
 
+    public class PhotoCard extends JPanel {
 
-public class PhotoCard extends JPanel {
-    private JLabel titleLabel;
-    private PhotoStorage storage;
-    private int index;
+        private JLabel titleLabel;
+        private PhotoStorage storage;
+        private int index;
 
-    public PhotoCard(PhotoStorage storage, int index) {
-        this.storage = storage;
-        this.index = index;
+        public PhotoCard(PhotoStorage storage, int index) {
+            this.storage = storage;
+            this.index = index;
 
-        PhotoStorage.Photo p = storage.getPhotos().get(index);
+            PhotoStorage.Photo p = storage.getPhotos().get(index);
 
-        setPreferredSize(new Dimension(150, 150));
-        setLayout(new BorderLayout());
-        setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            setPreferredSize(new Dimension(150, 150));
+            setLayout(new BorderLayout());
+            setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        // Photo
-        JLabel photoLabel = new JLabel();
-        Image img = new ImageIcon(p.getPath()).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        photoLabel.setIcon(new ImageIcon(img));
-        photoLabel.setHorizontalAlignment(JLabel.CENTER);
-        photoLabel.setVerticalAlignment(JLabel.CENTER);
-        add(photoLabel, BorderLayout.CENTER);
+            // Photo
+            JLabel photoLabel = new JLabel();
+            Image img = new ImageIcon(p.getPath()).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+            photoLabel.setIcon(new ImageIcon(img));
+            photoLabel.setHorizontalAlignment(JLabel.CENTER);
+            photoLabel.setVerticalAlignment(JLabel.CENTER);
+            add(photoLabel, BorderLayout.CENTER);
 
-        // Title
-        titleLabel = new JLabel(p.getTitle(), SwingConstants.CENTER);
-        add(titleLabel, BorderLayout.SOUTH);
+            // Title
+            titleLabel = new JLabel(p.getTitle(), SwingConstants.CENTER);
+            add(titleLabel, BorderLayout.SOUTH);
 
-        // Right-click menu
-        JPopupMenu menu = new JPopupMenu();
-        JMenuItem renameItem = new JMenuItem("Rename");
-        JMenuItem deleteItem = new JMenuItem("Delete");
+            // Right-click menu
+            JPopupMenu menu = new JPopupMenu();
+            JMenuItem renameItem = new JMenuItem("Rename");
+            JMenuItem deleteItem = new JMenuItem("Delete");
 
-        renameItem.addActionListener(e -> renamePhoto());
-        deleteItem.addActionListener(e -> deletePhoto());
+            renameItem.addActionListener(e -> renamePhoto());
+            deleteItem.addActionListener(e -> deletePhoto());
 
-        menu.add(renameItem);
-        menu.add(deleteItem);
-        this.setComponentPopupMenu(menu);
-        
-    }
+            menu.add(renameItem);
+            menu.add(deleteItem);
+            this.setComponentPopupMenu(menu);
 
-    private void renamePhoto() {
-        String newName = JOptionPane.showInputDialog(this, "Enter new name:", titleLabel.getText());
-        if (newName != null && !newName.trim().isEmpty()) {
-            titleLabel.setText(newName.trim());
-            storage.renamePhoto(index, newName.trim());
         }
-    }
 
-    private void deletePhoto() {
-        Container parent = getParent();
-        if (parent != null) {
-            parent.remove(this);
-            parent.revalidate();
-            parent.repaint();
-            storage.removePhoto(index);
+        private void renamePhoto() {
+            String newName = JOptionPane.showInputDialog(this, "Enter new name:", titleLabel.getText());
+            if (newName != null && !newName.trim().isEmpty()) {
+                titleLabel.setText(newName.trim());
+                storage.renamePhoto(index, newName.trim());
+            }
         }
+
+        private void deletePhoto() {
+            Container parent = getParent();
+            if (parent != null) {
+                parent.remove(this);
+                parent.revalidate();
+                parent.repaint();
+                storage.removePhoto(index);
+            }
+        }
+
     }
-
-}
-
 
     /**
      * @param args the command line arguments
@@ -599,7 +617,7 @@ public class PhotoCard extends JPanel {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new DashboardFrame().setVisible(true));
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -639,13 +657,10 @@ public class PhotoCard extends JPanel {
     private javax.swing.JPanel clScreenshots;
     private javax.swing.JPanel clVideos;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel variablePanel;
