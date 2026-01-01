@@ -1,1 +1,1 @@
-myMemo is a lightweight, smart personal media manager. It helps you organize, store, and browse your photos and videos with a clean, simple interface. Create albums, manage your media, and keep your memories easily accessible all in one place.
+
