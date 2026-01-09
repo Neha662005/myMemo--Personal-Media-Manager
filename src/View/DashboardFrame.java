@@ -15,6 +15,8 @@ import java.awt.*;
 import java.io.File;
 import javax.swing.JFileChooser;
 import Model.PhotoStorage;
+import Model.MediaStorage;
+import Model.*;
 
 public class DashboardFrame extends javax.swing.JFrame {
 
@@ -78,10 +80,10 @@ public class DashboardFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         SelectButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        AddItemsButton = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -333,13 +335,6 @@ public class DashboardFrame extends javax.swing.JFrame {
         DeleteButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\bin.png")); // NOI18N
         DeleteButton.setText("Delete");
 
-        jButton8.setText("Add");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Magneto", 0, 10)); // NOI18N
@@ -371,6 +366,13 @@ public class DashboardFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        AddItemsButton.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Add", "Add Photos", "Add Videos", "Add Screenshot", "Add Favourites", "Add" }));
+        AddItemsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddItemsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SearchingPanelLayout = new javax.swing.GroupLayout(SearchingPanel);
         SearchingPanel.setLayout(SearchingPanelLayout);
         SearchingPanelLayout.setHorizontalGroup(
@@ -384,8 +386,8 @@ public class DashboardFrame extends javax.swing.JFrame {
                         .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SearchButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -414,14 +416,17 @@ public class DashboardFrame extends javax.swing.JFrame {
                             .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(SearchingPanelLayout.createSequentialGroup()
-                                    .addGap(32, 32, 32)
-                                    .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(SearchButton)
-                                        .addComponent(jButton8)))
-                                .addGroup(SearchingPanelLayout.createSequentialGroup()
                                     .addGap(21, 21, 21)
-                                    .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(SearchingPanelLayout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, SearchingPanelLayout.createSequentialGroup()
+                                        .addGap(32, 32, 32)
+                                        .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(SearchButton))))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
@@ -498,39 +503,183 @@ public class DashboardFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SortComboBoxActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-
-
-    }//GEN-LAST:event_jButton8ActionPerformed
-
     private void PlusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlusButtonActionPerformed
-
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        int result = chooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
+        PhotoStorage storage= new PhotoStorage();
+        JFileChooser chooser = new JFileChooser(); chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+        int result = chooser.showOpenDialog(this); 
+        if (result == JFileChooser.APPROVE_OPTION) { 
             File file = chooser.getSelectedFile();
+        } 
+// Add to storage 
+        storage.addPhoto(file.getName(), file.getAbsolutePath()); 
+        int index = storage.getPhotos().size() - 1; 
+// Create card and add to panel
+        PhotoCard card = new PhotoCard(storage, index); 
+        clPhotos.add(card); 
+        clPhotos.revalidate(); 
+        clPhotos.repaint();
 
-            // Add to storage
-            storage.addPhoto(file.getName(), file.getAbsolutePath());
-            int index = storage.getPhotos().size() - 1;
-
-            // Create card and add to panel
-            PhotoCard card = new PhotoCard(storage, index);
-            clPhotos.add(card);
-            clPhotos.revalidate();
-            clPhotos.repaint();
-        }
-
-
+       
     }//GEN-LAST:event_PlusButtonActionPerformed
+
+    private void AddItemsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddItemsButtonActionPerformed
+//        // TODO add your handling code here:
+//        String selectedOption = AddItemsButton.getSelectedItem().toString();
+//
+//        // If "Add" is selected → do nothing
+//        if (selectedOption.equals("Add")) {
+//            return;
+//        }
+//
+//        JFileChooser chooser = new JFileChooser();
+//        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//
+//        int result = chooser.showOpenDialog(this);
+//        if (result != JFileChooser.APPROVE_OPTION) {
+//            return;
+//        }
+//
+//        File file = chooser.getSelectedFile();
+//
+//        // ADD PHOTOS
+//        if (selectedOption.equals("Add Photos")) {
+//
+//            storage.addPhoto(file.getName(), file.getAbsolutePath());
+//            int index = storage.getPhotos().size() - 1;
+//
+//            PhotoCard card = new PhotoCard(storage, index, WorkingPanel);
+//            clPhotos.add(card);
+//            clPhotos.revalidate();
+//            clPhotos.repaint();
+//        } // ADD VIDEOS
+////        else if (selectedOption.equals("Add Videos")) {
+////
+////            storage.addVideo(file.getName(), file.getAbsolutePath());
+////            int index = storage.getVideos().size() - 1;
+////
+////            VideoCard card = new VideoCard(storage, index);
+////            clVideos.add(card);
+////            clVideos.revalidate();
+////            clVideos.repaint();
+////        } // ADD SCREENSHOTS
+//        else if (selectedOption.equals("Add Screenshot")) {
+//
+//            storage.addPhoto(file.getName(), file.getAbsolutePath());
+//            int index = storage.getPhotos().size() - 1;
+//
+////            PhotoCard card = new PhotoCard(storage, index);
+//            clScreenshots.add(card);
+//            clScreenshots.revalidate();
+//            clScreenshots.repaint();
+//        } // ADD FAVOURITES (photo OR video)
+////        else if (selectedOption.equals("Add Favourites")) {
+////
+////            storage.addFavourite(file.getName(), file.getAbsolutePath());
+////            int index = storage.getFavourites().size() - 1;
+////
+////            FavouriteCard card = new FavouriteCard(storage, index);
+////            clFavourites.add(card);
+////            clFavourites.revalidate();
+////            clFavourites.repaint();
+////        }
+    }//GEN-LAST:event_AddItemsButtonActionPerformed
 
     /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
      */
-    private PhotoStorage storage = new PhotoStorage();
+//    private MediaStorage storage = new MediaStorage();
+//    
+//
+//        protected JLabel titleLabel;
+//
+//        public class BaseCard extends JPanel {
+//
+//            protected JLabel titleLabel;
+//            protected JPanel parentPanel;
+//
+//            public BaseCard(String title, String path, JPanel parentPanel) {
+//
+//                this.parentPanel = parentPanel;
+//
+//                setPreferredSize(new Dimension(150, 150));
+//                setLayout(new BorderLayout());
+//                setBorder(BorderFactory.createLineBorder(Color.GRAY));
+//
+//                JLabel mediaLabel = new JLabel();
+//                Image img = new ImageIcon(path).getImage()
+//                        .getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+//                mediaLabel.setIcon(new ImageIcon(img));
+//                mediaLabel.setHorizontalAlignment(JLabel.CENTER);
+//                add(mediaLabel, BorderLayout.CENTER);
+//
+//                titleLabel = new JLabel(title, SwingConstants.CENTER);
+//                add(titleLabel, BorderLayout.SOUTH);
+//
+//                // Right-click menu
+//                JPopupMenu menu = new JPopupMenu();
+//                JMenuItem renameItem = new JMenuItem("Rename");
+//                JMenuItem deleteItem = new JMenuItem("Delete");
+//
+//                renameItem.addActionListener(e -> renameItem());
+//                deleteItem.addActionListener(e -> deleteItem());
+//
+//                menu.add(renameItem);
+//                menu.add(deleteItem);
+//                setComponentPopupMenu(menu);
+//            }
+//
+//            // Rename works for all cards
+//            protected void renameItem() {
+//                String newName = JOptionPane.showInputDialog(
+//                        this,
+//                        "Enter new name:",
+//                        titleLabel.getText()
+//                );
+//
+//                if (newName != null && !newName.trim().isEmpty()) {
+//                    titleLabel.setText(newName);
+//                }
+//            }
+//
+//            // Delete works for all cards
+//            protected void deleteItem() {
+//                parentPanel.remove(this);
+//                parentPanel.revalidate();
+//                parentPanel.repaint();
+//            }
+//        }
+//        
+//    public class PhotoCard extends BaseCard {
+//
+//        public PhotoCard(PhotoStorages storage, int index, JPanel parentPanel) {
+//            super(
+//                    storage.getPhotos().get(index).getTitle(), // title
+//                    storage.getPhotos().get(index).getPath(), // path
+//                    parentPanel, // parent panel
+//                    storage, // storage reference
+//                    index // index
+//            );
+//        }
+//    }
+//
+//public class VideoCard extends BaseCard {
+//    
+//    private VideoStorage storage;
+//    private int index;
+//
+//    public VideoCard(VideoStorage storage, int index, JPanel parentPanel) {
+//        super(
+//            storage.getVideos().get(index).getTitle(),
+//            "video_icon.png",
+//            parentPanel
+//        );
+//
+//        this.storage = storage;
+//        this.index = index;
+//    }
+
+
 
     public class PhotoCard extends JPanel {
 
@@ -622,6 +771,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ActualLayoutPanel;
+    private javax.swing.JComboBox<String> AddItemsButton;
     private javax.swing.JButton AlbumButton;
     private javax.swing.JButton BinButton;
     private javax.swing.JLabel Collections;
@@ -657,7 +807,6 @@ public class DashboardFrame extends javax.swing.JFrame {
     private javax.swing.JPanel clScreenshots;
     private javax.swing.JPanel clVideos;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

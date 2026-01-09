@@ -1,5 +1,5 @@
-india,india,india,india
-china,china,china,china
 neha,987654321,neha@gmail.com,neha1234
 Neha K.C(Khatri),9876543210,neha@gmai.com,neha123
 bikram,9876543212,bikramgmailcom,bikram123
+neha,123456,neha@email.com,neha1234
+nayan,9766562005,nayan@gmail.com,Nayan@123

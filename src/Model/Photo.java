@@ -2,7 +2,7 @@ package Model;
 
 import javax.swing.ImageIcon;
 
-public class Photo {
+public class Photo extends MediaItems{
     private String title;
     private ImageIcon thumbnail;
 
@@ -10,6 +10,7 @@ public class Photo {
     public Photo(String title, ImageIcon thumbnail) {
         this.title = title;
         this.thumbnail = thumbnail;
+        this.selected = false;
     }
 
     //Getter methods
