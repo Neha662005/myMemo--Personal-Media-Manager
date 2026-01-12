@@ -4,10 +4,9 @@
  */
 package View;
 
-import Controller.Actions;
-import Model.UserInfo;
+import Controller.*;
+import Model.*;
 import javax.swing.*;
-import View.DashboardFrame;
 
 public class SigninFrame extends JFrame {
     
@@ -509,5 +508,6 @@ public class SigninFrame extends JFrame {
     private javax.swing.JPanel logo;
     private javax.swing.JPanel signup;
     // End of variables declaration//GEN-END:variables
-
-}
+public static void main(String[] args) {
+    java.awt.EventQueue.invokeLater(() -> new SigninFrame().setVisible(true));
+}}

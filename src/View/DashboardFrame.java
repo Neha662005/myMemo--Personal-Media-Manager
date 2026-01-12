@@ -14,16 +14,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import javax.swing.JFileChooser;
-<<<<<<< HEAD
-import Model.PhotoStorage;
-import Model.MediaStorage;
-import Model.*;
-=======
 import Model.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import Controller.*;
->>>>>>> main
+
 
 public class DashboardFrame extends javax.swing.JFrame {
     private Controller.UndoRedoManager undoRedoManager = new Controller.UndoRedoManager();
@@ -31,7 +26,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     CardLayout cl;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardFrame.class.getName());
-
+    PhotoStorage PhotoStorage = new PhotoStorage();
     /**
      * Creates new form DashboardFrame
      */
@@ -371,11 +366,7 @@ am.put("redo", new AbstractAction() {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-<<<<<<< HEAD
-        AddItemsButton.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Add", "Add Photos", "Add Videos", "Add Screenshot", "Add Favourites", "Add" }));
-=======
         AddItemsButton.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Add", "Add Photos", "Add Videos", "Add Screenshot", "Add Favourites" }));
->>>>>>> main
         AddItemsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddItemsButtonActionPerformed(evt);
@@ -396,11 +387,7 @@ am.put("redo", new AbstractAction() {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SearchButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-<<<<<<< HEAD
-                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-=======
                         .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
->>>>>>> main
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -429,15 +416,12 @@ am.put("redo", new AbstractAction() {
                             .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(SearchingPanelLayout.createSequentialGroup()
-<<<<<<< HEAD
-=======
                                     .addGap(32, 32, 32)
                                     .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(SearchButton)
                                         .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(SearchingPanelLayout.createSequentialGroup()
->>>>>>> main
                                     .addGap(21, 21, 21)
                                     .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -469,8 +453,8 @@ am.put("redo", new AbstractAction() {
 private void refreshPhotosPanel() {
     clPhotos.removeAll();
 
-    for (int i = 0; i < storage.getPhotos().size(); i++) {
-        PhotoCard card = new PhotoCard(storage, i);
+    for (int i = 0; i < PhotoStorage.getPhotos().size(); i++) {
+        PhotoCard card = new PhotoCard(PhotoStorage, i);
         clPhotos.add(card);
     }
 
@@ -562,7 +546,7 @@ private int getSelectedPhotoIndex() {
     }
 
     // Get selected photo
-    PhotoStorage.Photo selectedPhoto = storage.getPhotos().get(selectedIndex);
+    PhotoStorage.Photo selectedPhoto = PhotoStorage.getPhotos().get(selectedIndex);
 
     // Create FavouriteItem using the selected photo
     FavouriteItem fav = new FavouriteItem(
@@ -584,26 +568,31 @@ private int getSelectedPhotoIndex() {
     }//GEN-LAST:event_SortComboBoxActionPerformed
 
     private void PlusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlusButtonActionPerformed
-<<<<<<< HEAD
-        PhotoStorage storage= new PhotoStorage();
-        JFileChooser chooser = new JFileChooser(); chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
-        int result = chooser.showOpenDialog(this); 
-        if (result == JFileChooser.APPROVE_OPTION) { 
-            File file = chooser.getSelectedFile();
-        } 
-// Add to storage 
-        storage.addPhoto(file.getName(), file.getAbsolutePath()); 
-        int index = storage.getPhotos().size() - 1; 
-// Create card and add to panel
-        PhotoCard card = new PhotoCard(storage, index); 
-        clPhotos.add(card); 
-        clPhotos.revalidate(); 
-        clPhotos.repaint();
+    JFileChooser chooser = new JFileChooser();
+    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+    int result = chooser.showOpenDialog(this); 
+    if (result != JFileChooser.APPROVE_OPTION) return;
 
+    File file = chooser.getSelectedFile();
+
+    // Use class-level PhotoStorage, not a new local one
+    undoRedoManager.execute(new Controller.ActionCommand(
+        () -> { // DO
+            PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
+            refreshPhotosPanel();
+        },
+        () -> { // UNDO
+            int lastIndex = PhotoStorage.getPhotos().size() - 1;
+            if (lastIndex >= 0) {
+                PhotoStorage.removePhoto(lastIndex);
+                refreshPhotosPanel();
+            }
+        }
+    ));
        
     }//GEN-LAST:event_PlusButtonActionPerformed
 
-    private void AddItemsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddItemsButtonActionPerformed
+//    private void AddItemsButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 //        // TODO add your handling code here:
 //        String selectedOption = AddItemsButton.getSelectedItem().toString();
 //
@@ -625,72 +614,73 @@ private int getSelectedPhotoIndex() {
 //        // ADD PHOTOS
 //        if (selectedOption.equals("Add Photos")) {
 //
-//            storage.addPhoto(file.getName(), file.getAbsolutePath());
-//            int index = storage.getPhotos().size() - 1;
+//            PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
+//            int index = PhotoStorage.getPhotos().size() - 1;
 //
-//            PhotoCard card = new PhotoCard(storage, index, WorkingPanel);
+//            PhotoCard card = new PhotoCard(PhotoStorage, index, WorkingPanel);
 //            clPhotos.add(card);
 //            clPhotos.revalidate();
 //            clPhotos.repaint();
 //        } // ADD VIDEOS
 ////        else if (selectedOption.equals("Add Videos")) {
 ////
-////            storage.addVideo(file.getName(), file.getAbsolutePath());
-////            int index = storage.getVideos().size() - 1;
+////            PhotoStorage.addVideo(file.getName(), file.getAbsolutePath());
+////            int index = PhotoStorage.getVideos().size() - 1;
 ////
-////            VideoCard card = new VideoCard(storage, index);
+////            VideoCard card = new VideoCard(PhotoStorage, index);
 ////            clVideos.add(card);
 ////            clVideos.revalidate();
 ////            clVideos.repaint();
 ////        } // ADD SCREENSHOTS
 //        else if (selectedOption.equals("Add Screenshot")) {
 //
-//            storage.addPhoto(file.getName(), file.getAbsolutePath());
-//            int index = storage.getPhotos().size() - 1;
+//            PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
+//            int index = PhotoStorage.getPhotos().size() - 1;
 //
-////            PhotoCard card = new PhotoCard(storage, index);
+////            PhotoCard card = new PhotoCard(PhotoStorage, index);
 //            clScreenshots.add(card);
 //            clScreenshots.revalidate();
 //            clScreenshots.repaint();
 //        } // ADD FAVOURITES (photo OR video)
 ////        else if (selectedOption.equals("Add Favourites")) {
 ////
-////            storage.addFavourite(file.getName(), file.getAbsolutePath());
-////            int index = storage.getFavourites().size() - 1;
+////            PhotoStorage.addFavourite(file.getName(), file.getAbsolutePath());
+////            int index = PhotoStorage.getFavourites().size() - 1;
 ////
-////            FavouriteCard card = new FavouriteCard(storage, index);
+////            FavouriteCard card = new FavouriteCard(PhotoStorage, index);
 ////            clFavourites.add(card);
 ////            clFavourites.revalidate();
 ////            clFavourites.repaint();
 ////        }
-    }//GEN-LAST:event_AddItemsButtonActionPerformed
+//    }                                              
 
-=======
 
-   JFileChooser chooser = new JFileChooser();
-    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-    int result = chooser.showOpenDialog(this);
-    if (result == JFileChooser.APPROVE_OPTION) {
-
-        File file = chooser.getSelectedFile();
-
-        undoRedoManager.execute(new ActionCommand(
-            () -> { // DO
-                storage.addPhoto(file.getName(), file.getAbsolutePath());
-                refreshPhotosPanel();
-            },
-            () -> { // UNDO
-                int lastIndex = storage.getPhotos().size() - 1;
-                if (lastIndex >= 0) {
-                    storage.removePhoto(lastIndex);
-                    refreshPhotosPanel();
-                }
-            }
-        ));
-    }
-
-    }//GEN-LAST:event_PlusButtonActionPerformed
+//   JFileChooser chooser = new JFileChooser();
+//    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//
+//    int result = chooser.showOpenDialog(this);
+//    if (result == JFileChooser.APPROVE_OPTION) {
+//
+//        File file = chooser.getSelectedFile();
+//
+//        undoRedoManager.execute(new ActionCommand(
+//            () -> { // DO
+//                PhotoStorage photoStorage = new PhotoStorage();
+//                photoStorage.addPhoto(file.getName(), file.getAbsolutePath());
+//                refreshPhotosPanel();
+//            },
+//            () -> { // UNDO
+//                int lastIndex = PhotoStorage.getPhotos().size() - 1;
+//                if (lastIndex >= 0) {
+//                    PhotoStorage.removePhoto(lastIndex);
+//                    refreshPhotosPanel();
+//                }
+//            }
+//        ));
+//    }
+//
+//    }                                          
 
     private void AddItemsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddItemsButtonActionPerformed
     String selectedOption = (String) AddItemsButton.getSelectedItem(); // Get combo box selection
@@ -707,12 +697,12 @@ private int getSelectedPhotoIndex() {
     if (result == JFileChooser.APPROVE_OPTION) {
         File file = chooser.getSelectedFile();
 
-        // Add file to storage (reuse addPhoto for everything)
-        storage.addPhoto(file.getName(), file.getAbsolutePath());
-        int index = storage.getPhotos().size() - 1;
+        // Add file to PhotoStorage (reuse addPhoto for everything)
+        PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
+        int index = PhotoStorage.getPhotos().size() - 1;
 
         // Create card
-        PhotoCard card = new PhotoCard(storage, index);
+        PhotoCard card = new PhotoCard(PhotoStorage, index);
 
         // Add card to the correct panel
         switch (selectedOption) {
@@ -784,12 +774,12 @@ private int getSelectedPhotoIndex() {
         }
     }
 }
->>>>>>> main
+
     /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
      */
-//    private MediaStorage storage = new MediaStorage();
+//    private MediaStorage PhotoStorage = new MediaStorage();
 //    
 //
 //        protected JLabel titleLabel;
@@ -853,12 +843,12 @@ private int getSelectedPhotoIndex() {
 //        
 //    public class PhotoCard extends BaseCard {
 //
-//        public PhotoCard(PhotoStorages storage, int index, JPanel parentPanel) {
+//        public PhotoCard(PhotoStorages PhotoStorage, int index, JPanel parentPanel) {
 //            super(
-//                    storage.getPhotos().get(index).getTitle(), // title
-//                    storage.getPhotos().get(index).getPath(), // path
+//                    PhotoStorage.getPhotos().get(index).getTitle(), // title
+//                    PhotoStorage.getPhotos().get(index).getPath(), // path
 //                    parentPanel, // parent panel
-//                    storage, // storage reference
+//                    PhotoStorage, // PhotoStorage reference
 //                    index // index
 //            );
 //        }
@@ -866,17 +856,17 @@ private int getSelectedPhotoIndex() {
 //
 //public class VideoCard extends BaseCard {
 //    
-//    private VideoStorage storage;
+//    private VideoStorage PhotoStorage;
 //    private int index;
 //
-//    public VideoCard(VideoStorage storage, int index, JPanel parentPanel) {
+//    public VideoCard(VideoStorage PhotoStorage, int index, JPanel parentPanel) {
 //        super(
-//            storage.getVideos().get(index).getTitle(),
+//            PhotoStorage.getVideos().get(index).getTitle(),
 //            "video_icon.png",
 //            parentPanel
 //        );
 //
-//        this.storage = storage;
+//        this.PhotoStorage = PhotoStorage;
 //        this.index = index;
 //    }
 
@@ -885,15 +875,15 @@ private int getSelectedPhotoIndex() {
     public class PhotoCard extends JPanel {
 
         private JLabel titleLabel;
-        private PhotoStorage storage;
+        private PhotoStorage PhotoStorage;
         private int index;
         private boolean selected = false;
 
-        public PhotoCard(PhotoStorage storage, int index) {
-            this.storage = storage;
+        public PhotoCard(PhotoStorage PhotoStorage, int index) {
+            this.PhotoStorage = PhotoStorage;
             this.index = index;
 
-            PhotoStorage.Photo p = storage.getPhotos().get(index);
+            PhotoStorage.Photo p = PhotoStorage.getPhotos().get(index);
 
             setPreferredSize(new Dimension(150, 150));
             setLayout(new BorderLayout());
@@ -946,7 +936,7 @@ private int getSelectedPhotoIndex() {
             String newName = JOptionPane.showInputDialog(this, "Enter new name:", titleLabel.getText());
             if (newName != null && !newName.trim().isEmpty()) {
                 titleLabel.setText(newName.trim());
-                storage.renamePhoto(index, newName.trim());
+                PhotoStorage.renamePhoto(index, newName.trim());
             }
         }
 
@@ -956,7 +946,7 @@ private int getSelectedPhotoIndex() {
                 parent.remove(this);
                 parent.revalidate();
                 parent.repaint();
-                storage.removePhoto(index);
+                PhotoStorage.removePhoto(index);
             }
         }
 
@@ -991,10 +981,7 @@ private int getSelectedPhotoIndex() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ActualLayoutPanel;
     private javax.swing.JComboBox<String> AddItemsButton;
-<<<<<<< HEAD
-=======
     private javax.swing.JButton AddToFavouritesButton;
->>>>>>> main
     private javax.swing.JButton AlbumButton;
     private javax.swing.JButton BinButton;
     private javax.swing.JLabel Collections;
@@ -1029,10 +1016,6 @@ private int getSelectedPhotoIndex() {
     private javax.swing.JPanel clPhotos;
     private javax.swing.JPanel clScreenshots;
     private javax.swing.JPanel clVideos;
-<<<<<<< HEAD
-    private javax.swing.JButton jButton1;
-=======
->>>>>>> main
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
