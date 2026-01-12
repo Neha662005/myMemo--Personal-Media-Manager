@@ -14,9 +14,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import javax.swing.JFileChooser;
-import Model.PhotoStorage;
+import Model.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import Controller.*;
 
 public class DashboardFrame extends javax.swing.JFrame {
+    private Controller.UndoRedoManager undoRedoManager = new Controller.UndoRedoManager();
+
 
     CardLayout cl;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardFrame.class.getName());
@@ -26,6 +31,26 @@ public class DashboardFrame extends javax.swing.JFrame {
      */
     public DashboardFrame() {
         initComponents();
+        // Undo (Ctrl+Z) / Redo (Ctrl+Y)
+        InputMap im = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = this.getRootPane().getActionMap();
+
+        im.put(KeyStroke.getKeyStroke("control Z"), "undo");
+        im.put(KeyStroke.getKeyStroke("control Y"), "redo");
+
+        am.put("undo", new AbstractAction() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                undoRedoManager.undo();
+                refreshPhotosPanel();
+            }
+        });
+am.put("redo", new AbstractAction() {
+    public void actionPerformed(java.awt.event.ActionEvent e) {
+        undoRedoManager.redo();
+        refreshPhotosPanel();
+    }
+});
+
         this.setTitle("myMemo");
         cl = (CardLayout) WorkingPanel.getLayout();
     }
@@ -75,13 +100,13 @@ public class DashboardFrame extends javax.swing.JFrame {
         ProfileButton = new javax.swing.JButton();
         PlusButton = new javax.swing.JButton();
         SortComboBox = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        AddToFavouritesButton = new javax.swing.JButton();
         SelectButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        AddItemsButton = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -212,33 +237,9 @@ public class DashboardFrame extends javax.swing.JFrame {
         WorkingPanel.add(clDocuments, "card5");
 
         clScreenshots.setBackground(new java.awt.Color(51, 255, 51));
-
-        javax.swing.GroupLayout clScreenshotsLayout = new javax.swing.GroupLayout(clScreenshots);
-        clScreenshots.setLayout(clScreenshotsLayout);
-        clScreenshotsLayout.setHorizontalGroup(
-            clScreenshotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1210, Short.MAX_VALUE)
-        );
-        clScreenshotsLayout.setVerticalGroup(
-            clScreenshotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
-        );
-
         WorkingPanel.add(clScreenshots, "card6");
 
         clFavourites.setBackground(new java.awt.Color(0, 0, 255));
-
-        javax.swing.GroupLayout clFavouritesLayout = new javax.swing.GroupLayout(clFavourites);
-        clFavourites.setLayout(clFavouritesLayout);
-        clFavouritesLayout.setHorizontalGroup(
-            clFavouritesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1210, Short.MAX_VALUE)
-        );
-        clFavouritesLayout.setVerticalGroup(
-            clFavouritesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
-        );
-
         WorkingPanel.add(clFavourites, "card7");
 
         clBin.setBackground(new java.awt.Color(51, 51, 51));
@@ -319,11 +320,11 @@ public class DashboardFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\favorite.png")); // NOI18N
-        jButton1.setText("Add to Favourite");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        AddToFavouritesButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\favorite.png")); // NOI18N
+        AddToFavouritesButton.setText("Add to Favourite");
+        AddToFavouritesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                AddToFavouritesButtonActionPerformed(evt);
             }
         });
 
@@ -332,13 +333,6 @@ public class DashboardFrame extends javax.swing.JFrame {
 
         DeleteButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\bin.png")); // NOI18N
         DeleteButton.setText("Delete");
-
-        jButton8.setText("Add");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -371,6 +365,13 @@ public class DashboardFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        AddItemsButton.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Add", "Add Photos", "Add Videos", "Add Screenshot", "Add Favourites" }));
+        AddItemsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddItemsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SearchingPanelLayout = new javax.swing.GroupLayout(SearchingPanel);
         SearchingPanel.setLayout(SearchingPanelLayout);
         SearchingPanelLayout.setHorizontalGroup(
@@ -384,8 +385,8 @@ public class DashboardFrame extends javax.swing.JFrame {
                         .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SearchButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -397,7 +398,7 @@ public class DashboardFrame extends javax.swing.JFrame {
                         .addGap(204, 204, 204)
                         .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(77, 77, 77)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(AddToFavouritesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                         .addComponent(SelectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(53, 53, 53)
@@ -418,13 +419,13 @@ public class DashboardFrame extends javax.swing.JFrame {
                                     .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(SearchButton)
-                                        .addComponent(jButton8)))
+                                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(SearchingPanelLayout.createSequentialGroup()
                                     .addGap(21, 21, 21)
                                     .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
+                            .addComponent(AddToFavouritesButton)
                             .addComponent(SelectButton)
                             .addComponent(DeleteButton)
                             .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -439,7 +440,19 @@ public class DashboardFrame extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(1539, 861));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+private void refreshPhotosPanel() {
+    clPhotos.removeAll();
 
+    for (int i = 0; i < storage.getPhotos().size(); i++) {
+        PhotoCard card = new PhotoCard(storage, i);
+        clPhotos.add(card);
+    }
+
+    clPhotos.revalidate();
+    clPhotos.repaint();
+}
+
+    
     private void FavouritesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FavouritesButtonActionPerformed
         // TODO add your handling code here:
         WorkingPanel.add(clFavourites, "Favourites Panel");
@@ -490,42 +503,179 @@ public class DashboardFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_NotificationButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    // Clears and rebuilds clFavourites from the FavouriteItem linked list
+private void refreshFavouritesPanel() {
+    clFavourites.removeAll();
+
+    FavouriteItem.traverse((item, idx) -> {
+        FavoriteCard card = new FavoriteCard(item);
+        clFavourites.add(card);
+    });
+
+    clFavourites.revalidate();
+    clFavourites.repaint();
+}
+
+private int getSelectedPhotoIndex() {
+    for (Component c : clPhotos.getComponents()) {
+        if (c instanceof PhotoCard) {
+            PhotoCard card = (PhotoCard) c;
+            if (card.isSelected()) return card.getIndex();
+        }
+    }
+    return -1; // none selected
+}
+
+
+    private void AddToFavouritesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddToFavouritesButtonActionPerformed
+// Check if any photo is selected
+    int selectedIndex = getSelectedPhotoIndex(); // method to get selected photo index from clPhotos
+    if (selectedIndex == -1) {
+        JOptionPane.showMessageDialog(this, "No photo selected!");
+        return;
+    }
+
+    // Get selected photo
+    PhotoStorage.Photo selectedPhoto = storage.getPhotos().get(selectedIndex);
+
+    // Create FavouriteItem using the selected photo
+    FavouriteItem fav = new FavouriteItem(
+            selectedPhoto.getTitle(),
+            selectedPhoto.getPath(),
+            "photo"
+    );
+
+    // Add to linked list
+    FavouriteItem.addFirst(fav);
+
+    // Refresh favorites panel
+    refreshFavouritesPanel();
+
+    }//GEN-LAST:event_AddToFavouritesButtonActionPerformed
 
     private void SortComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SortComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SortComboBoxActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-
-
-    }//GEN-LAST:event_jButton8ActionPerformed
-
     private void PlusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlusButtonActionPerformed
 
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+   JFileChooser chooser = new JFileChooser();
+    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-        int result = chooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
+    int result = chooser.showOpenDialog(this);
+    if (result == JFileChooser.APPROVE_OPTION) {
 
-            // Add to storage
-            storage.addPhoto(file.getName(), file.getAbsolutePath());
-            int index = storage.getPhotos().size() - 1;
+        File file = chooser.getSelectedFile();
 
-            // Create card and add to panel
-            PhotoCard card = new PhotoCard(storage, index);
-            clPhotos.add(card);
-            clPhotos.revalidate();
-            clPhotos.repaint();
-        }
-
+        undoRedoManager.execute(new ActionCommand(
+            () -> { // DO
+                storage.addPhoto(file.getName(), file.getAbsolutePath());
+                refreshPhotosPanel();
+            },
+            () -> { // UNDO
+                int lastIndex = storage.getPhotos().size() - 1;
+                if (lastIndex >= 0) {
+                    storage.removePhoto(lastIndex);
+                    refreshPhotosPanel();
+                }
+            }
+        ));
+    }
 
     }//GEN-LAST:event_PlusButtonActionPerformed
 
+    private void AddItemsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddItemsButtonActionPerformed
+    String selectedOption = (String) AddItemsButton.getSelectedItem(); // Get combo box selection
+
+    if (selectedOption.equals("Add")) {
+        // Do nothing
+        return;
+    }
+
+    JFileChooser chooser = new JFileChooser();
+    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+    int result = chooser.showOpenDialog(this);
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+
+        // Add file to storage (reuse addPhoto for everything)
+        storage.addPhoto(file.getName(), file.getAbsolutePath());
+        int index = storage.getPhotos().size() - 1;
+
+        // Create card
+        PhotoCard card = new PhotoCard(storage, index);
+
+        // Add card to the correct panel
+        switch (selectedOption) {
+            case "Add Photos":
+                clPhotos.add(card);
+                clPhotos.revalidate();
+                clPhotos.repaint();
+                break;
+
+            case "Add Videos":
+                ActualLayoutPanel.add(card);
+                ActualLayoutPanel.revalidate();
+                ActualLayoutPanel.repaint();
+                break;
+
+            case "Add Screenshot":
+                clScreenshots.add(card);
+                clScreenshots.revalidate();
+                clScreenshots.repaint();
+                break;
+
+            case "Add Favourites":
+                clFavourites.add(card);
+                clFavourites.revalidate();
+                clFavourites.repaint();
+                break;
+        }
+    }
+
+    }//GEN-LAST:event_AddItemsButtonActionPerformed
+
+    
+    public class FavoriteCard extends JPanel {
+
+    private JLabel titleLabel;
+
+    public FavoriteCard(FavouriteItem item) {
+        setPreferredSize(new Dimension(150, 150));
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        // Image
+        JLabel photoLabel = new JLabel();
+        ImageIcon icon = new ImageIcon(item.getPath());
+        Image img = icon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        photoLabel.setIcon(new ImageIcon(img));
+        photoLabel.setHorizontalAlignment(JLabel.CENTER);
+        photoLabel.setVerticalAlignment(JLabel.CENTER);
+        add(photoLabel, BorderLayout.CENTER);
+
+        // Title
+        titleLabel = new JLabel(item.getTitle(), SwingConstants.CENTER);
+        add(titleLabel, BorderLayout.SOUTH);
+
+        // Right-click menu
+        JPopupMenu menu = new JPopupMenu();
+        JMenuItem deleteItem = new JMenuItem("Delete");
+        deleteItem.addActionListener(e -> deleteCard());
+        menu.add(deleteItem);
+        setComponentPopupMenu(menu);
+    }
+
+    private void deleteCard() {
+        Container parent = getParent();
+        if (parent != null) {
+            parent.remove(this);
+            parent.revalidate();
+            parent.repaint();
+        }
+    }
+}
     /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -537,6 +687,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         private JLabel titleLabel;
         private PhotoStorage storage;
         private int index;
+        private boolean selected = false;
 
         public PhotoCard(PhotoStorage storage, int index) {
             this.storage = storage;
@@ -571,6 +722,23 @@ public class DashboardFrame extends javax.swing.JFrame {
             menu.add(renameItem);
             menu.add(deleteItem);
             this.setComponentPopupMenu(menu);
+           
+            
+             this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                selected = !selected; // toggle
+                setBorder(BorderFactory.createLineBorder(selected ? Color.BLUE : Color.GRAY));
+            }
+        });
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public int getIndex() {
+        return index;
 
         }
 
@@ -622,6 +790,8 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ActualLayoutPanel;
+    private javax.swing.JComboBox<String> AddItemsButton;
+    private javax.swing.JButton AddToFavouritesButton;
     private javax.swing.JButton AlbumButton;
     private javax.swing.JButton BinButton;
     private javax.swing.JLabel Collections;
@@ -656,8 +826,6 @@ public class DashboardFrame extends javax.swing.JFrame {
     private javax.swing.JPanel clPhotos;
     private javax.swing.JPanel clScreenshots;
     private javax.swing.JPanel clVideos;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

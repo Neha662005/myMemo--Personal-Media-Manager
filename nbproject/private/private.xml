@@ -10,6 +10,11 @@
             <file>file:/D:/myMemo/myMemo/src/Main/Main.java</file>
             <file>file:/D:/myMemo/myMemo/src/Model/Photo.java</file>
             <file>file:/D:/myMemo/myMemo/src/Model/PhotoStorage.java</file>
+            <file>file:/D:/myMemo/myMemo/src/userInformation.txt</file>
+            <file>file:/D:/myMemo/myMemo/src/Model/FavouriteItem.java</file>
+            <file>file:/D:/myMemo/myMemo/src/View/FavouriteCard.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Controller/ActionCommand.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Controller/UndoRedoManager.java</file>
         </group>
     </open-files>
 </project-private>
