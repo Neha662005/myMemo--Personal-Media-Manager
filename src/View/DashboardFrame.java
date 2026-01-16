@@ -5,8 +5,27 @@
 package View;
 
 /**
+ * DashboardFrame is the main application window for the myMemo photo management system.
+ * It provides a comprehensive interface for organizing, viewing, and managing photos, screenshots,
+ * and favorite items with support for undo/redo operations and file management.
+ *
+ * 
+ * Key Features:
+ * 
+ *   Photo, screenshot, and favorites collection management
+ *   Recycle bin functionality for deleted items
+ *   Search and sort capabilities for media items
+ *   Undo/Redo support using Ctrl+Z and Ctrl+Y
+ *   Add items to favorites
+ *   File browser integration for adding new media
+ * 
+ * 
  *
  * @author HP
+ * @version 1.0
+ * @see UndoRedoManager
+ * @see PhotoStorage
+ * @see MyQueue
  */
 import java.awt.CardLayout;
 import javax.swing.ImageIcon;
@@ -19,19 +38,34 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import Controller.*;
 
+import java.awt.event.*;
+
+
 
 public class DashboardFrame extends javax.swing.JFrame {
+    /** Manager for undo and redo operations */
     private Controller.UndoRedoManager undoRedoManager = new Controller.UndoRedoManager();
-
-
+    
+    /** Queue for managing deleted items in the recycle bin */
+    private MyQueue<Component> binQueue = new MyQueue<>();
+    
+    /** CardLayout for switching between different view panels */
     CardLayout cl;
+    
+    /** Logger for system events and debugging */
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardFrame.class.getName());
+    
+    /** Storage manager for photo items */
     PhotoStorage PhotoStorage = new PhotoStorage();
+    
     /**
-     * Creates new form DashboardFrame
+     * Constructs the DashboardFrame and initializes all UI components.
+     * Sets up keyboard shortcuts for undo (Ctrl+Z) and redo (Ctrl+Y) operations.
+     * Initializes the main application window with title "myMemo".
      */
     public DashboardFrame() {
         initComponents();
+        setupBinPopupMenu();
         // Undo (Ctrl+Z) / Redo (Ctrl+Y)
         InputMap im = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = this.getRootPane().getActionMap();
@@ -75,39 +109,24 @@ am.put("redo", new AbstractAction() {
         buttonGroup8 = new javax.swing.ButtonGroup();
         variablePanel = new javax.swing.JPanel();
         PhotosButton = new javax.swing.JButton();
-        VideoButton = new javax.swing.JButton();
-        AlbumButton = new javax.swing.JButton();
-        DocumentsButton = new javax.swing.JButton();
         ScreenshotssButton = new javax.swing.JButton();
         FavouritesButton = new javax.swing.JButton();
         BinButton = new javax.swing.JButton();
         Collections = new javax.swing.JLabel();
-        Storage = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         WorkingPanel = new javax.swing.JPanel();
         clPhotos = new javax.swing.JPanel();
-        clAlbums = new javax.swing.JPanel();
-        clDocuments = new javax.swing.JPanel();
         clScreenshots = new javax.swing.JPanel();
         clFavourites = new javax.swing.JPanel();
         clBin = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        clVideos = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        ActualLayoutPanel = new javax.swing.JPanel();
         SearchingPanel = new javax.swing.JPanel();
         SearchTextField = new javax.swing.JTextField();
-        SearchButton = new javax.swing.JButton();
-        NotificationButton = new javax.swing.JButton();
-        ProfileButton = new javax.swing.JButton();
         PlusButton = new javax.swing.JButton();
         SortComboBox = new javax.swing.JComboBox<>();
         AddToFavouritesButton = new javax.swing.JButton();
-        SelectButton = new javax.swing.JButton();
-        DeleteButton = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         AddItemsButton = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -126,43 +145,7 @@ am.put("redo", new AbstractAction() {
                 PhotosButtonActionPerformed(evt);
             }
         });
-        variablePanel.add(PhotosButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 240, 50));
-
-        VideoButton.setBackground(new java.awt.Color(243, 199, 181));
-        VideoButton.setFont(new java.awt.Font("Lucida Fax", 1, 18)); // NOI18N
-        VideoButton.setForeground(new java.awt.Color(255, 255, 255));
-        VideoButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\video-camera.png")); // NOI18N
-        VideoButton.setText("Videos");
-        VideoButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                VideoButtonActionPerformed(evt);
-            }
-        });
-        variablePanel.add(VideoButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 240, 50));
-
-        AlbumButton.setBackground(new java.awt.Color(243, 199, 181));
-        AlbumButton.setFont(new java.awt.Font("Lucida Fax", 1, 18)); // NOI18N
-        AlbumButton.setForeground(new java.awt.Color(255, 255, 255));
-        AlbumButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\album.png")); // NOI18N
-        AlbumButton.setText("Albums");
-        AlbumButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AlbumButtonActionPerformed(evt);
-            }
-        });
-        variablePanel.add(AlbumButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 240, 50));
-
-        DocumentsButton.setBackground(new java.awt.Color(243, 199, 181));
-        DocumentsButton.setFont(new java.awt.Font("Lucida Fax", 1, 18)); // NOI18N
-        DocumentsButton.setForeground(new java.awt.Color(255, 255, 255));
-        DocumentsButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\google-docs.png")); // NOI18N
-        DocumentsButton.setText("Documents");
-        DocumentsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DocumentsButtonActionPerformed(evt);
-            }
-        });
-        variablePanel.add(DocumentsButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, 240, 50));
+        variablePanel.add(PhotosButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 240, 50));
 
         ScreenshotssButton.setBackground(new java.awt.Color(243, 199, 181));
         ScreenshotssButton.setFont(new java.awt.Font("Lucida Fax", 1, 18)); // NOI18N
@@ -186,7 +169,7 @@ am.put("redo", new AbstractAction() {
                 FavouritesButtonActionPerformed(evt);
             }
         });
-        variablePanel.add(FavouritesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 240, 50));
+        variablePanel.add(FavouritesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, 240, 50));
 
         BinButton.setBackground(new java.awt.Color(243, 199, 181));
         BinButton.setFont(new java.awt.Font("Lucida Fax", 1, 18)); // NOI18N
@@ -198,89 +181,36 @@ am.put("redo", new AbstractAction() {
                 BinButtonActionPerformed(evt);
             }
         });
-        variablePanel.add(BinButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 530, 240, 50));
+        variablePanel.add(BinButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 550, 240, 50));
 
         Collections.setFont(new java.awt.Font("Lucida Handwriting", 1, 24)); // NOI18N
         Collections.setText("Collections");
-        variablePanel.add(Collections, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
+        variablePanel.add(Collections, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
 
-        Storage.setFont(new java.awt.Font("Lucida Fax", 1, 18)); // NOI18N
-        Storage.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\cloud.png")); // NOI18N
-        Storage.setText("Storage");
-        variablePanel.add(Storage, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 610, 120, -1));
+        jLabel2.setFont(new java.awt.Font("Lucida Handwriting", 0, 24)); // NOI18N
+        jLabel2.setText("myMemo");
+        variablePanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, 130, -1));
 
-        getContentPane().add(variablePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 120, 320, 910));
+        jLabel1.setFont(new java.awt.Font("Magneto", 0, 10)); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Pictures\\logo (2).jpg")); // NOI18N
+        variablePanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 110, 98));
+
+        getContentPane().add(variablePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 1030));
 
         WorkingPanel.setBackground(new java.awt.Color(255, 255, 255));
         WorkingPanel.setLayout(new java.awt.CardLayout());
 
         clPhotos.setBackground(new java.awt.Color(255, 255, 255));
-        clPhotos.setLayout(new java.awt.GridBagLayout());
         WorkingPanel.add(clPhotos, "card3");
 
-        clAlbums.setBackground(new java.awt.Color(255, 0, 0));
-        clAlbums.setLayout(new java.awt.GridLayout(1, 0));
-        WorkingPanel.add(clAlbums, "card4");
-
-        clDocuments.setBackground(new java.awt.Color(255, 255, 51));
-
-        javax.swing.GroupLayout clDocumentsLayout = new javax.swing.GroupLayout(clDocuments);
-        clDocuments.setLayout(clDocumentsLayout);
-        clDocumentsLayout.setHorizontalGroup(
-            clDocumentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1210, Short.MAX_VALUE)
-        );
-        clDocumentsLayout.setVerticalGroup(
-            clDocumentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
-        );
-
-        WorkingPanel.add(clDocuments, "card5");
-
-        clScreenshots.setBackground(new java.awt.Color(51, 255, 51));
+        clScreenshots.setBackground(new java.awt.Color(255, 255, 255));
         WorkingPanel.add(clScreenshots, "card6");
 
-        clFavourites.setBackground(new java.awt.Color(0, 0, 255));
+        clFavourites.setBackground(new java.awt.Color(255, 255, 255));
         WorkingPanel.add(clFavourites, "card7");
 
-        clBin.setBackground(new java.awt.Color(51, 51, 51));
-
-        javax.swing.GroupLayout clBinLayout = new javax.swing.GroupLayout(clBin);
-        clBin.setLayout(clBinLayout);
-        clBinLayout.setHorizontalGroup(
-            clBinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, clBinLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1204, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        clBinLayout.setVerticalGroup(
-            clBinLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-        );
-
+        clBin.setBackground(new java.awt.Color(255, 255, 255));
         WorkingPanel.add(clBin, "card9");
-
-        clVideos.setBackground(new java.awt.Color(0, 102, 102));
-
-        ActualLayoutPanel.setLayout(new java.awt.GridLayout(1, 0));
-        jScrollPane2.setViewportView(ActualLayoutPanel);
-
-        javax.swing.GroupLayout clVideosLayout = new javax.swing.GroupLayout(clVideos);
-        clVideos.setLayout(clVideosLayout);
-        clVideosLayout.setHorizontalGroup(
-            clVideosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(clVideosLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1204, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        clVideosLayout.setVerticalGroup(
-            clVideosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, clVideosLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))
-        );
-
-        WorkingPanel.add(clVideos, "card8");
 
         getContentPane().add(WorkingPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, 1210, 730));
 
@@ -293,19 +223,6 @@ am.put("redo", new AbstractAction() {
             }
         });
 
-        SearchButton.setText("Search");
-
-        NotificationButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\Notification.png")); // NOI18N
-        NotificationButton.setBorder(null);
-        NotificationButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NotificationButtonActionPerformed(evt);
-            }
-        });
-
-        ProfileButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\Profile.png")); // NOI18N
-        ProfileButton.setBorder(null);
-
         PlusButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\Plus.png")); // NOI18N
         PlusButton.setBorder(null);
         PlusButton.addActionListener(new java.awt.event.ActionListener() {
@@ -314,7 +231,7 @@ am.put("redo", new AbstractAction() {
             }
         });
 
-        SortComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Name", "Sort by Date", "Sort by File TYpe" }));
+        SortComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Name" }));
         SortComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SortComboBoxActionPerformed(evt);
@@ -329,47 +246,17 @@ am.put("redo", new AbstractAction() {
             }
         });
 
-        SelectButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\check.png")); // NOI18N
-        SelectButton.setText("Select");
-
-        DeleteButton.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Icons\\bin.png")); // NOI18N
-        DeleteButton.setText("Delete");
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("Magneto", 0, 10)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\myMemo\\myMemo\\Image\\Pictures\\logo (2).jpg")); // NOI18N
-
-        jLabel2.setFont(new java.awt.Font("Lucida Handwriting", 0, 12)); // NOI18N
-        jLabel2.setText("myMemo");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        AddItemsButton.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Add", "Add Photos", "Add Videos", "Add Screenshot", "Add Favourites" }));
+        AddItemsButton.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Add", "Add Photos", "Add Screenshot" }));
         AddItemsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddItemsButtonActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Logout ->");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -378,79 +265,55 @@ am.put("redo", new AbstractAction() {
         SearchingPanelLayout.setHorizontalGroup(
             SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SearchingPanelLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(SearchingPanelLayout.createSequentialGroup()
-                        .addGap(306, 306, 306)
-                        .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SearchButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52))
-                    .addGroup(SearchingPanelLayout.createSequentialGroup()
-                        .addGap(204, 204, 204)
+                        .addGap(119, 119, 119)
                         .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77)
+                        .addGap(138, 138, 138)
                         .addComponent(AddToFavouritesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addComponent(SelectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))))
+                        .addGap(138, 138, 138)
+                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(SearchingPanelLayout.createSequentialGroup()
+                        .addGap(259, 259, 259)
+                        .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 418, Short.MAX_VALUE)
+                        .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         SearchingPanelLayout.setVerticalGroup(
             SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SearchingPanelLayout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(70, 70, 70))
             .addGroup(SearchingPanelLayout.createSequentialGroup()
-                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(12, 12, 12)
+                .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(AddToFavouritesButton))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SearchingPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(SearchingPanelLayout.createSequentialGroup()
-                        .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(SearchingPanelLayout.createSequentialGroup()
-                                    .addGap(32, 32, 32)
-                                    .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(SearchButton)
-                                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(SearchingPanelLayout.createSequentialGroup()
-                                    .addGap(21, 21, 21)
-                                    .addComponent(ProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(SearchingPanelLayout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, SearchingPanelLayout.createSequentialGroup()
-                                        .addGap(32, 32, 32)
-                                        .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(SearchButton))))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(SearchingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(AddToFavouritesButton)
-                            .addComponent(SelectButton)
-                            .addComponent(DeleteButton)
-                            .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(SearchingPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(PlusButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(SortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(AddItemsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        getContentPane().add(SearchingPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1530, 120));
+        getContentPane().add(SearchingPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, 1200, 120));
 
         setSize(new java.awt.Dimension(1539, 861));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-private void refreshPhotosPanel() {
+    
+    /**
+     * Refreshes the photos panel by reloading all photo cards from PhotoStorage.
+     * Clears existing components and repopulates with the current photo collection.
+     */
+    private void refreshPhotosPanel() {
     clPhotos.removeAll();
 
     for (int i = 0; i < PhotoStorage.getPhotos().size(); i++) {
@@ -462,56 +325,92 @@ private void refreshPhotosPanel() {
     clPhotos.repaint();
 }
 
+    /**
+     * Sets up the context menu (right-click popup) for the recycle bin panel.
+     * Provides options for managing deleted items.
+     */
+    private void setupBinPopupMenu() {
+        // Right-click menu for the bin panel
+        JPopupMenu binMenu = new JPopupMenu();
+        JMenuItem deleteAllItem = new JMenuItem("Delete All");
+
+        deleteAllItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteAllFromBin();
+            }
+        });
+
+        binMenu.add(deleteAllItem);
+        clBin.setComponentPopupMenu(binMenu);
+    }
+    private void deleteAllFromBin() {
+    while (!binQueue.isEmpty()) {
+        Component card = binQueue.dequeue(); // remove from queue
+        clBin.remove(card);                  // remove visually
+    }
+
+    clBin.revalidate();
+    clBin.repaint();
+}
     
-    private void FavouritesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FavouritesButtonActionPerformed
-        // TODO add your handling code here:
+    private void FavouritesButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+        // Display favorites panel
         WorkingPanel.add(clFavourites, "Favourites Panel");
         cl.show(WorkingPanel, "Favourites Panel");
-    }//GEN-LAST:event_FavouritesButtonActionPerformed
+    }                                                
 
-    private void AlbumButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlbumButtonActionPerformed
-        // TODO add your handling code here:
-        WorkingPanel.add(clAlbums, "Albums Panel");
-        cl.show(WorkingPanel, "Albums Panel");
-    }//GEN-LAST:event_AlbumButtonActionPerformed
-
-    private void PhotosButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PhotosButtonActionPerformed
-        // TODO add your handling code here:
+    /**
+     * Handles Photos button click to display photos panel.
+     */
+    private void PhotosButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        // Display photos panel
         WorkingPanel.add(clPhotos, "Photos Panel");
         cl.show(WorkingPanel, "Photos Panel");
-    }//GEN-LAST:event_PhotosButtonActionPerformed
+    }                                            
 
-    private void VideoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VideoButtonActionPerformed
-        // TODO add your handling code here:
-        WorkingPanel.add(clVideos, "Videos Panel");
-        cl.show(WorkingPanel, "Videos Panel");
-    }//GEN-LAST:event_VideoButtonActionPerformed
-
-    private void DocumentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DocumentsButtonActionPerformed
-        // TODO add your handling code here:
-        WorkingPanel.add(clDocuments, "Documents Panel");
-        cl.show(WorkingPanel, "Documents Panel");
-    }//GEN-LAST:event_DocumentsButtonActionPerformed
-
-    private void ScreenshotssButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ScreenshotssButtonActionPerformed
-        // TODO add your handling code here:
-        WorkingPanel.add(clScreenshots, "Screenshots Panel");
-        cl.show(WorkingPanel, "Screenshots Panel");
-    }//GEN-LAST:event_ScreenshotssButtonActionPerformed
-
-    private void BinButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BinButtonActionPerformed
-        // TODO add your handling code here:
+    /**
+     * Handles Bin button click to display bin panel.
+     */
+    private void BinButtonActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // Display bin panel
         WorkingPanel.add(clBin, "Bin Panel");
         cl.show(WorkingPanel, "Bin Panel");
-    }//GEN-LAST:event_BinButtonActionPerformed
+    }                                         
 
-    private void SearchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SearchTextFieldActionPerformed
+    /**
+     * Handles search text field submission.
+     */
+    private void SearchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        // Execute search
+        performSearch();
+    }                                               
 
-    private void NotificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NotificationButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NotificationButtonActionPerformed
+    /**
+     * Refreshes the favorites panel by loading from the linked list.
+     */
+    // private void FavouritesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FavouritesButtonActionPerformed
+    //     // TODO add your handling code here:
+    //     WorkingPanel.add(clFavourites, "Favourites Panel");
+    //     cl.show(WorkingPanel, "Favourites Panel");
+    // }//GEN-LAST:event_FavouritesButtonActionPerformed
+
+    // private void PhotosButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PhotosButtonActionPerformed
+    //     // TODO add your handling code here:
+    //     WorkingPanel.add(clPhotos, "Photos Panel");
+    //     cl.show(WorkingPanel, "Photos Panel");
+    // }//GEN-LAST:event_PhotosButtonActionPerformed
+
+    // private void BinButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BinButtonActionPerformed
+    //     // TODO add your handling code here:
+    //     WorkingPanel.add(clBin, "Bin Panel");
+    //     cl.show(WorkingPanel, "Bin Panel");
+    // }//GEN-LAST:event_BinButtonActionPerformed
+
+    // private void SearchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchTextFieldActionPerformed
+    //     // TODO add your handling code here:
+    //     performSearch();
+    // }//GEN-LAST:event_SearchTextFieldActionPerformed
 
     // Clears and rebuilds clFavourites from the FavouriteItem linked list
 private void refreshFavouritesPanel() {
@@ -530,15 +429,18 @@ private int getSelectedPhotoIndex() {
     for (Component c : clPhotos.getComponents()) {
         if (c instanceof PhotoCard) {
             PhotoCard card = (PhotoCard) c;
-            if (card.isSelected()) return card.getIndex();
+            if (card.isSelected()) {
+                return card.getIndex();
+            }
         }
     }
-    return -1; // none selected
+    return -1;
 }
 
-
+    /**
+     * Handles adding selected photo to favorites.
+     */
     private void AddToFavouritesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddToFavouritesButtonActionPerformed
-// Check if any photo is selected
     int selectedIndex = getSelectedPhotoIndex(); // method to get selected photo index from clPhotos
     if (selectedIndex == -1) {
         JOptionPane.showMessageDialog(this, "No photo selected!");
@@ -564,18 +466,51 @@ private int getSelectedPhotoIndex() {
     }//GEN-LAST:event_AddToFavouritesButtonActionPerformed
 
     private void SortComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SortComboBoxActionPerformed
-        // TODO add your handling code here:
+    String selected = (String) SortComboBox.getSelectedItem();
+
+    if (selected == null) return;
+
+    switch (selected) {
+        case "Sort by Name":
+            PhotoStorage.getPhotos().sort((p1, p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle()));
+            break;
+
+//        case "Sort by Date":
+//            // If you have a date field in Photo, sort by it.
+//            // For now, we can skip or sort by file creation time if implemented
+//            break;
+//
+//        case "Sort by File TYpe":
+//            PhotoStorage.getPhotos().sort((p1, p2) -> p1.getFileType().compareToIgnoreCase(p2.getFileType()));
+//            break;
+//
+//        // Optional: add "Sort by Size"
+//        case "Sort by Size":
+//            PhotoStorage.getPhotos().sort((p1, p2) -> Integer.compare(p1.getSize(), p2.getSize()));
+//            break;
+    }
+
+    // Refresh the photo panel to show sorted photos
+    refreshPhotosPanel();
     }//GEN-LAST:event_SortComboBoxActionPerformed
 
     private void PlusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlusButtonActionPerformed
-    JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser();
     chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+    
+    // Allow only image files
+    javax.swing.filechooser.FileNameExtensionFilter filter =
+        new javax.swing.filechooser.FileNameExtensionFilter(
+            "Image files", "png", "jpg", "jpeg", "gif"
+        );
+    chooser.setFileFilter(filter);
+
     int result = chooser.showOpenDialog(this); 
     if (result != JFileChooser.APPROVE_OPTION) return;
 
     File file = chooser.getSelectedFile();
 
-    // Use class-level PhotoStorage, not a new local one
+    // Execute with undo/redo
     undoRedoManager.execute(new Controller.ActionCommand(
         () -> { // DO
             PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
@@ -591,148 +526,117 @@ private int getSelectedPhotoIndex() {
     ));
        
     }//GEN-LAST:event_PlusButtonActionPerformed
-
-//    private void AddItemsButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
-//        // TODO add your handling code here:
-//        String selectedOption = AddItemsButton.getSelectedItem().toString();
-//
-//        // If "Add" is selected → do nothing
-//        if (selectedOption.equals("Add")) {
-//            return;
-//        }
-//
-//        JFileChooser chooser = new JFileChooser();
-//        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-//
-//        int result = chooser.showOpenDialog(this);
-//        if (result != JFileChooser.APPROVE_OPTION) {
-//            return;
-//        }
-//
-//        File file = chooser.getSelectedFile();
-//
-//        // ADD PHOTOS
-//        if (selectedOption.equals("Add Photos")) {
-//
-//            PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
-//            int index = PhotoStorage.getPhotos().size() - 1;
-//
-//            PhotoCard card = new PhotoCard(PhotoStorage, index, WorkingPanel);
-//            clPhotos.add(card);
-//            clPhotos.revalidate();
-//            clPhotos.repaint();
-//        } // ADD VIDEOS
-////        else if (selectedOption.equals("Add Videos")) {
-////
-////            PhotoStorage.addVideo(file.getName(), file.getAbsolutePath());
-////            int index = PhotoStorage.getVideos().size() - 1;
-////
-////            VideoCard card = new VideoCard(PhotoStorage, index);
-////            clVideos.add(card);
-////            clVideos.revalidate();
-////            clVideos.repaint();
-////        } // ADD SCREENSHOTS
-//        else if (selectedOption.equals("Add Screenshot")) {
-//
-//            PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
-//            int index = PhotoStorage.getPhotos().size() - 1;
-//
-////            PhotoCard card = new PhotoCard(PhotoStorage, index);
-//            clScreenshots.add(card);
-//            clScreenshots.revalidate();
-//            clScreenshots.repaint();
-//        } // ADD FAVOURITES (photo OR video)
-////        else if (selectedOption.equals("Add Favourites")) {
-////
-////            PhotoStorage.addFavourite(file.getName(), file.getAbsolutePath());
-////            int index = PhotoStorage.getFavourites().size() - 1;
-////
-////            FavouriteCard card = new FavouriteCard(PhotoStorage, index);
-////            clFavourites.add(card);
-////            clFavourites.revalidate();
-////            clFavourites.repaint();
-////        }
-//    }                                              
-
-
-
-//   JFileChooser chooser = new JFileChooser();
-//    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-//
-//    int result = chooser.showOpenDialog(this);
-//    if (result == JFileChooser.APPROVE_OPTION) {
-//
-//        File file = chooser.getSelectedFile();
-//
-//        undoRedoManager.execute(new ActionCommand(
-//            () -> { // DO
-//                PhotoStorage photoStorage = new PhotoStorage();
-//                photoStorage.addPhoto(file.getName(), file.getAbsolutePath());
-//                refreshPhotosPanel();
-//            },
-//            () -> { // UNDO
-//                int lastIndex = PhotoStorage.getPhotos().size() - 1;
-//                if (lastIndex >= 0) {
-//                    PhotoStorage.removePhoto(lastIndex);
-//                    refreshPhotosPanel();
-//                }
-//            }
-//        ));
-//    }
-//
-//    }                                          
+                                    
 
     private void AddItemsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddItemsButtonActionPerformed
-    String selectedOption = (String) AddItemsButton.getSelectedItem(); // Get combo box selection
-
-    if (selectedOption.equals("Add")) {
-        // Do nothing
-        return;
-    }
+    String selectedOption = (String) AddItemsButton.getSelectedItem(); 
+    if (selectedOption.equals("Add")) return;
 
     JFileChooser chooser = new JFileChooser();
     chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
+    // Set filter just for UI hint
+    if (selectedOption.equals("Add Photos") || selectedOption.equals("Add Screenshot")) {
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                "Image files", "png", "jpg", "jpeg", "gif"));
+    } 
     int result = chooser.showOpenDialog(this);
-    if (result == JFileChooser.APPROVE_OPTION) {
-        File file = chooser.getSelectedFile();
+    if (result != JFileChooser.APPROVE_OPTION) return;
 
-        // Add file to PhotoStorage (reuse addPhoto for everything)
-        PhotoStorage.addPhoto(file.getName(), file.getAbsolutePath());
-        int index = PhotoStorage.getPhotos().size() - 1;
+    File file = chooser.getSelectedFile();
+    String name = file.getName();
+    String ext = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
 
-        // Create card
-        PhotoCard card = new PhotoCard(PhotoStorage, index);
+    boolean valid = false;
+    if (selectedOption.equals("Add Photos") || selectedOption.equals("Add Screenshot")) {
+        valid = ext.equals("png") || ext.equals("jpg") || ext.equals("jpeg") || ext.equals("gif");
+    } 
+    if (!valid) {
+        JOptionPane.showMessageDialog(this, 
+            "Invalid file type! Please select a valid " + 
+            (selectedOption.contains("Video") ? "video" : "image") + " file.");
+        return; // Stop execution
+    }
 
-        // Add card to the correct panel
-        switch (selectedOption) {
-            case "Add Photos":
-                clPhotos.add(card);
-                clPhotos.revalidate();
-                clPhotos.repaint();
-                break;
+    // Now safe: Add only once via undoRedoManager
+    final String filePath = file.getAbsolutePath();
+    final String fileTitle = file.getName();
 
-            case "Add Videos":
-                ActualLayoutPanel.add(card);
-                ActualLayoutPanel.revalidate();
-                ActualLayoutPanel.repaint();
-                break;
+    undoRedoManager.execute(new Controller.ActionCommand(
+        () -> { // DO
+            PhotoStorage.addPhoto(fileTitle, filePath);
+            int index = PhotoStorage.getPhotos().size() - 1;
+            PhotoCard card = new PhotoCard(PhotoStorage, index);
 
-            case "Add Screenshot":
-                clScreenshots.add(card);
-                clScreenshots.revalidate();
-                clScreenshots.repaint();
-                break;
+            switch (selectedOption) {
+                case "Add Photos":
+                    clPhotos.add(card);
+                    clPhotos.revalidate();
+                    clPhotos.repaint();
+                    break;
+                case "Add Screenshot":
+                    clScreenshots.add(card);
+                    clScreenshots.revalidate();
+                    clScreenshots.repaint();
+                    break;
+                case "Add Favourites":
+                    clFavourites.add(card);
+                    clFavourites.revalidate();
+                    clFavourites.repaint();
+                    break;
+            }
+        },
+        () -> { // UNDO
+            int lastIndex = PhotoStorage.getPhotos().size() - 1;
+            if (lastIndex >= 0) {
+                PhotoStorage.removePhoto(lastIndex);
+                refreshPhotosPanel(); // Optional: or remove from specific panel
+            }
+        }
+    ));
+    }//GEN-LAST:event_AddItemsButtonActionPerformed
 
-            case "Add Favourites":
-                clFavourites.add(card);
-                clFavourites.revalidate();
-                clFavourites.repaint();
-                break;
+    private void performSearch() {
+    String query = SearchTextField.getText().trim().toLowerCase();
+
+    // If empty → show all photos
+    if (query.isEmpty()) {
+        refreshPhotosPanel();
+        return;
+    }
+
+    // Clear current panel
+    clPhotos.removeAll();
+
+    // Loop through photos and show only those whose title contains the query
+    for (int i = 0; i < PhotoStorage.getPhotos().size(); i++) {
+        PhotoStorage.Photo p = PhotoStorage.getPhotos().get(i);
+        if (p.getTitle().toLowerCase().contains(query)) {
+            PhotoCard card = new PhotoCard(PhotoStorage, i);
+            clPhotos.add(card);
         }
     }
 
-    }//GEN-LAST:event_AddItemsButtonActionPerformed
+    clPhotos.revalidate();
+    clPhotos.repaint();
+}
+
+    
+    private void ScreenshotssButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ScreenshotssButtonActionPerformed
+        // TODO add your handling code here:
+        WorkingPanel.add(clScreenshots, "Screenshots Panel");
+        cl.show(WorkingPanel, "Screenshots Panel");
+    }//GEN-LAST:event_ScreenshotssButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+            // Open SignIn frame
+    SigninFrame signIn = new SigninFrame();
+    signIn.setVisible(true);
+
+    // Close current Dashboard frame
+    this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     
     public class FavoriteCard extends JPanel {
@@ -779,97 +683,6 @@ private int getSelectedPhotoIndex() {
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
      */
-//    private MediaStorage PhotoStorage = new MediaStorage();
-//    
-//
-//        protected JLabel titleLabel;
-//
-//        public class BaseCard extends JPanel {
-//
-//            protected JLabel titleLabel;
-//            protected JPanel parentPanel;
-//
-//            public BaseCard(String title, String path, JPanel parentPanel) {
-//
-//                this.parentPanel = parentPanel;
-//
-//                setPreferredSize(new Dimension(150, 150));
-//                setLayout(new BorderLayout());
-//                setBorder(BorderFactory.createLineBorder(Color.GRAY));
-//
-//                JLabel mediaLabel = new JLabel();
-//                Image img = new ImageIcon(path).getImage()
-//                        .getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-//                mediaLabel.setIcon(new ImageIcon(img));
-//                mediaLabel.setHorizontalAlignment(JLabel.CENTER);
-//                add(mediaLabel, BorderLayout.CENTER);
-//
-//                titleLabel = new JLabel(title, SwingConstants.CENTER);
-//                add(titleLabel, BorderLayout.SOUTH);
-//
-//                // Right-click menu
-//                JPopupMenu menu = new JPopupMenu();
-//                JMenuItem renameItem = new JMenuItem("Rename");
-//                JMenuItem deleteItem = new JMenuItem("Delete");
-//
-//                renameItem.addActionListener(e -> renameItem());
-//                deleteItem.addActionListener(e -> deleteItem());
-//
-//                menu.add(renameItem);
-//                menu.add(deleteItem);
-//                setComponentPopupMenu(menu);
-//            }
-//
-//            // Rename works for all cards
-//            protected void renameItem() {
-//                String newName = JOptionPane.showInputDialog(
-//                        this,
-//                        "Enter new name:",
-//                        titleLabel.getText()
-//                );
-//
-//                if (newName != null && !newName.trim().isEmpty()) {
-//                    titleLabel.setText(newName);
-//                }
-//            }
-//
-//            // Delete works for all cards
-//            protected void deleteItem() {
-//                parentPanel.remove(this);
-//                parentPanel.revalidate();
-//                parentPanel.repaint();
-//            }
-//        }
-//        
-//    public class PhotoCard extends BaseCard {
-//
-//        public PhotoCard(PhotoStorages PhotoStorage, int index, JPanel parentPanel) {
-//            super(
-//                    PhotoStorage.getPhotos().get(index).getTitle(), // title
-//                    PhotoStorage.getPhotos().get(index).getPath(), // path
-//                    parentPanel, // parent panel
-//                    PhotoStorage, // PhotoStorage reference
-//                    index // index
-//            );
-//        }
-//    }
-//
-//public class VideoCard extends BaseCard {
-//    
-//    private VideoStorage PhotoStorage;
-//    private int index;
-//
-//    public VideoCard(VideoStorage PhotoStorage, int index, JPanel parentPanel) {
-//        super(
-//            PhotoStorage.getVideos().get(index).getTitle(),
-//            "video_icon.png",
-//            parentPanel
-//        );
-//
-//        this.PhotoStorage = PhotoStorage;
-//        this.index = index;
-//    }
-
 
 
     public class PhotoCard extends JPanel {
@@ -939,18 +752,42 @@ private int getSelectedPhotoIndex() {
                 PhotoStorage.renamePhoto(index, newName.trim());
             }
         }
+        
+        // Generic queue of Components
 
-        private void deletePhoto() {
-            Container parent = getParent();
-            if (parent != null) {
-                parent.remove(this);
-                parent.revalidate();
-                parent.repaint();
-                PhotoStorage.removePhoto(index);
-            }
+
+private int getPhotoIndex() {
+    for (int i = 0; i < clPhotos.getComponentCount(); i++) {
+        if (clPhotos.getComponent(i) == this) { // 'this' is the current card
+            return i;
         }
-
     }
+    return -1; // not found
+}
+  
+
+
+private void deletePhoto() {
+    int index = getPhotoIndex(); // find this card's index
+    if (index == -1) return;
+
+    // Remove from main panel
+    Component card = clPhotos.getComponent(index);
+    clPhotos.remove(card);
+    clPhotos.revalidate();
+    clPhotos.repaint();
+
+    // Add to queue
+    binQueue.enqueue(card);  // MyQueue handles FIFO
+
+    // Show in bin panel
+    clBin.add(card);
+    clBin.revalidate();
+    clBin.repaint();
+}}
+    
+
+
 
     /**
      * @param args the command line arguments
@@ -979,27 +816,17 @@ private int getSelectedPhotoIndex() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel ActualLayoutPanel;
     private javax.swing.JComboBox<String> AddItemsButton;
     private javax.swing.JButton AddToFavouritesButton;
-    private javax.swing.JButton AlbumButton;
     private javax.swing.JButton BinButton;
     private javax.swing.JLabel Collections;
-    private javax.swing.JButton DeleteButton;
-    private javax.swing.JButton DocumentsButton;
     private javax.swing.JButton FavouritesButton;
-    private javax.swing.JButton NotificationButton;
     private javax.swing.JButton PhotosButton;
     private javax.swing.JButton PlusButton;
-    private javax.swing.JButton ProfileButton;
     private javax.swing.JButton ScreenshotssButton;
-    private javax.swing.JButton SearchButton;
     private javax.swing.JTextField SearchTextField;
     private javax.swing.JPanel SearchingPanel;
-    private javax.swing.JButton SelectButton;
     private javax.swing.JComboBox<String> SortComboBox;
-    private javax.swing.JLabel Storage;
-    private javax.swing.JButton VideoButton;
     private javax.swing.JPanel WorkingPanel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -1009,18 +836,13 @@ private int getSelectedPhotoIndex() {
     private javax.swing.ButtonGroup buttonGroup6;
     private javax.swing.ButtonGroup buttonGroup7;
     private javax.swing.ButtonGroup buttonGroup8;
-    private javax.swing.JPanel clAlbums;
     private javax.swing.JPanel clBin;
-    private javax.swing.JPanel clDocuments;
     private javax.swing.JPanel clFavourites;
     private javax.swing.JPanel clPhotos;
     private javax.swing.JPanel clScreenshots;
-    private javax.swing.JPanel clVideos;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel variablePanel;
     // End of variables declaration//GEN-END:variables
 }

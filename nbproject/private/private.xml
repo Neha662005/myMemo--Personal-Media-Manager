@@ -15,6 +15,16 @@
             <file>file:/D:/myMemo/myMemo/src/View/FavouriteCard.java</file>
             <file>file:/D:/myMemo/myMemo/src/Controller/ActionCommand.java</file>
             <file>file:/D:/myMemo/myMemo/src/Controller/UndoRedoManager.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Model/MediaStorage.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Model/MediaItems.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Model/Video.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Controller/MyStack.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Controller/MyQueue.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Controller/BinManager.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Controller/PhotoManager.java</file>
+            <file>file:/D:/myMemo/myMemo/src/Controller/AdminAuth.java</file>
+            <file>file:/D:/myMemo/myMemo/src/View/AdminPanel.java</file>
+            <file>file:/D:/myMemo/myMemo/test/Main/MainTest.java</file>
         </group>
     </open-files>
 </project-private>

@@ -384,7 +384,7 @@
                                   <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" attributes="0">
-                                          <Component id="SignupPageLoginButton" min="-2" pref="108" max="-2" attributes="0"/>
+                                          <Component id="LoginButton" min="-2" pref="108" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="SignUpPageSignUpButton" min="-2" pref="126" max="-2" attributes="0"/>
                                       </Group>
@@ -429,7 +429,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="SignUpPageSignUpButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="SignupPageLoginButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LoginButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
                           </Group>
@@ -491,7 +491,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SignUpPageSignUpButtonActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="SignupPageLoginButton">
+                    <Component class="javax.swing.JButton" name="LoginButton">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="cc" red="cc" type="rgb"/>
@@ -510,7 +510,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SignupPageLoginButtonActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LoginButtonActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel4">
